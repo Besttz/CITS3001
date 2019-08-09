@@ -10,3 +10,6 @@ $RECYCLE.BIN/
 .TemporaryItems
 .Trashes
 
+.idea/workspace.xml
+.DS_Store
+out/*
