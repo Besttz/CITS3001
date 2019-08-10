@@ -104,6 +104,9 @@ public class Strings {
         }
     }
 
+    private static void BM(String T, String P) {
+
+    }
     public static void main(String[] args) {
         String T = "mississippi";
         String P = "iss";
