@@ -11,38 +11,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lab2/Knapsack.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lab2/KnapsackImp.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="34" column="45" selection-start-line="34" selection-start-column="45" selection-end-line="34" selection-end-column="45" />
-              <folding>
-                <element signature="docComment;method#fractionalKnapsack#0;class#KnapsackImp#0" />
-                <element signature="docComment;method#discreteKnapsack#0;class#KnapsackImp#0" />
-                <element signature="docComment;method#mergeSort#0;class#KnapsackImp#0" />
-                <element signature="method#mergeSort#0;class#KnapsackImp#0" />
-                <element signature="docComment;method#mergeSort#1;class#KnapsackImp#0" />
-                <element signature="docComment;method#merge#0;class#KnapsackImp#0" />
-                <element signature="method#merge#0;class#KnapsackImp#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/lab2/Tester.java">
+        <entry file="file://$PROJECT_DIR$/src/lab4/WordChessImp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="13" column="38" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
+            <state relative-caret-position="91">
+              <caret line="7" column="3" lean-forward="true" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -78,15 +54,18 @@
         <option value="$PROJECT_DIR$/src/lab1/Main.java" />
         <option value="$PROJECT_DIR$/src/lab1/README.md" />
         <option value="$PROJECT_DIR$/src/lab2/Knapsack.java" />
-        <option value="$PROJECT_DIR$/src/lab2/KnapsackImp.java" />
         <option value="$PROJECT_DIR$/src/lab2/Tester.java" />
+        <option value="$PROJECT_DIR$/src/lab2/KnapsackImp.java" />
+        <option value="$PROJECT_DIR$/src/lab4/WordChess.java" />
+        <option value="$PROJECT_DIR$/src/lab4/Tester.java" />
+        <option value="$PROJECT_DIR$/src/lab4/WordChessImp.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="342" />
+    <option name="x" value="184" />
     <option name="y" value="1103" />
-    <option name="width" value="1461" />
+    <option name="width" value="1477" />
     <option name="height" value="1027" />
   </component>
   <component name="ProjectView">
@@ -95,6 +74,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -111,24 +91,22 @@
               <item name="CITS3001" type="b2602c69:ProjectViewProjectNode" />
               <item name="CITS3001" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lab1" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CITS3001" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CITS3001" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lab2" type="462c0819:PsiDirectoryNode" />
+              <item name="lab4" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="restartRequiresConfirmation" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/lab4" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -142,7 +120,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Tester">
+  <component name="RunManager" selected="Application.Tester (1)">
     <configuration name="LCS" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="lab1.LCS" />
       <module name="CITS3001" />
@@ -159,16 +137,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Sorter" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="lab1.Sorter" />
+    <configuration name="Strings" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="lab1.Strings" />
       <module name="CITS3001" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Strings" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="lab1.Strings" />
+    <configuration name="Tester (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="lab4.Tester" />
       <module name="CITS3001" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <method v="2">
@@ -191,11 +169,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Tester (1)" />
         <item itemvalue="Application.Tester" />
         <item itemvalue="Application.Main (1)" />
         <item itemvalue="Application.LCS" />
         <item itemvalue="Application.Strings" />
-        <item itemvalue="Application.Sorter" />
       </list>
     </recent_temporary>
   </component>
@@ -217,11 +195,16 @@
       <workItem from="1565423828525" duration="6269000" />
       <workItem from="1565763780804" duration="8961000" />
       <workItem from="1565809577590" duration="31000" />
+      <workItem from="1565877511606" duration="932000" />
+      <workItem from="1566294440241" duration="93000" />
+      <workItem from="1566295897373" duration="452000" />
+      <workItem from="1567573974189" duration="969000" />
+      <workItem from="1567688890565" duration="10209000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42027000" />
+    <option name="totallyTimeSpent" value="54682000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -233,18 +216,18 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="342" y="1103" width="1461" height="1027" extended-state="0" />
+    <frame x="184" y="1103" width="1477" height="1027" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23255815" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2076655" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
       <window_info id="Favorites" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.24491979" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.38930482" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.24385026" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3882353" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3298969" />
@@ -253,7 +236,7 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Terminal" order="10" weight="0.3298969" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.32941177" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.32834226" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -360,15 +343,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lab2/Knapsack.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+        <state relative-caret-position="19">
+          <caret line="1" selection-start-line="1" selection-end-line="5" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lab2/Tester.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="13" column="38" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lab2/KnapsackImp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="34" column="45" selection-start-line="34" selection-start-column="45" selection-end-line="34" selection-end-column="45" />
+        <state relative-caret-position="288">
+          <caret line="97" column="9" lean-forward="true" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
           <folding>
             <element signature="docComment;method#fractionalKnapsack#0;class#KnapsackImp#0" />
             <element signature="docComment;method#discreteKnapsack#0;class#KnapsackImp#0" />
@@ -381,10 +371,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lab2/Tester.java">
+    <entry file="file://$PROJECT_DIR$/src/lab4/corncob_caps.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" column="38" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
+        <state relative-caret-position="399">
+          <caret line="57893" column="5" lean-forward="true" selection-start-line="57893" selection-start-column="5" selection-end-line="57893" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lab4/Tester.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="96">
+          <caret line="39" column="30" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lab4/WordChess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="78" selection-start-line="15" selection-start-column="78" selection-end-line="15" selection-end-column="78" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lab4/WordChessImp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="91">
+          <caret line="7" column="3" lean-forward="true" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
