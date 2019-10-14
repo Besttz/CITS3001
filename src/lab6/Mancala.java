@@ -34,7 +34,7 @@ public class Mancala{
         board = new int[14];
         for(int i = 0; i<6; i++) board[i] = 3;
         for(int i = 7; i<13; i++) board[i] = 3;
-        boolean oneTurn = true;
+        boolean onesTurn = true;
         while(!gameOver()){
             if(onesTurn){
                 int mv = agent1.move(board.clone());
