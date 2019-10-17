@@ -30,7 +30,7 @@ public class Agent22181467 implements loveletter.Agent {
 
 
     public Agent22181467() {
-        rand  = new Random();    //  RANDOM SUPPORT
+        rand = new Random();    //  RANDOM SUPPORT
     }
 
     /**
@@ -56,7 +56,10 @@ public class Agent22181467 implements loveletter.Agent {
         //  ADD ALL CARDS TO THE ESTIMATE HANDS
         int totalPlayer = current.numPlayers();
         hand = new int[totalPlayer][9];
-        for (int i = 0; i < totalPlayer; i++) Arrays.fill(hand[i], 1);
+        for (int i = 0; i < totalPlayer; i++) {
+            Arrays.fill(hand[i], 1);
+            hand[i][0] = 0;
+        }
     }
 
     /**
@@ -67,6 +70,7 @@ public class Agent22181467 implements loveletter.Agent {
      **/
     public void see(Action act, State results) {
         if (results.eliminated(results.getPlayerIndex())) return;
+        current = results;
         //  REDUCE THE NUMBER OF CARD IN THE cards ARRAY
         int cardValue = act.card().value();
         cards[cardValue]--;
@@ -85,17 +89,46 @@ public class Agent22181467 implements loveletter.Agent {
      * @throws IllegalActionException when the Action produced is not legal.
      */
     public Action playCard(Card c) {
+        //  UPDATE THE GAME TIMES
+        round++;
+        //  GET A COPY AFTER GET CURRENT CARD
+        int[][] hand_new = hand.clone();
+        int[] cards_new = cards.clone();
+        cards_new[c.value()]--;
+        if (cards_new[c.value()] == 0)
+            for (int i = 0; i < current.numPlayers(); i++)
+                hand_new[i][c.value()] = 0;
+
+
         Action act = null;
 
         Card play;
-        while(!current.legalAction(act, c)){
-            if(rand.nextDouble()<0.5) play= c;
+
+
+        while (!current.legalAction(act, c)) {
+            if (rand.nextDouble() < 0.5) play = c;
             else play = current.getCard(myIndex);
+            if (play.value() == 8) continue;
             int target = rand.nextInt(current.numPlayers());
-            try{
-                switch(play){
+            try {
+                switch (play) {
                     case GUARD:
-                        act = Action.playGuard(myIndex, target, Card.values()[rand.nextInt(7)+1]);
+                        //  CHOOSE THE TARGET AS THE HIGHEST SCORE
+                        int highmark = -1;
+                        for (int i = 0; i < current.numPlayers(); i++) {
+                            if (i == myIndex) continue;
+                            if (current.eliminated(i)) continue;
+                            if (current.handmaid(i)) continue;
+                            if (current.score(i) >= highmark) target = i;
+                        }
+                        //  GUESS FROM THE CARDS WHICH HAS TWO
+                        int guessCard = 0;
+                        for (int i = 2; i < 6; i++) {
+                            if (cards_new[i]==2) guessCard =i;
+                        }
+                        while (hand_new[target][guessCard]==0) guessCard = rand.nextInt(7) + 1;
+                        act = Action.playGuard(myIndex, target, Card.values()[guessCard-1]);
+
                         break;
                     case PRIEST:
                         act = Action.playPriest(myIndex, target);
@@ -118,7 +151,7 @@ public class Agent22181467 implements loveletter.Agent {
                     default:
                         act = null;//never play princess
                 }
-            }catch(IllegalActionException e){/*do nothing*/}
+            } catch (IllegalActionException e) {/*do nothing*/}
         }
         return act;
     }
