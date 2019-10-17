@@ -13,7 +13,7 @@ public class Agent22181467 implements loveletter.Agent {
     /**
      * This is the array saving the possible card in users hand
      */
-    private int[][] hand;
+    private int[][] hands;
     /**
      * The cards left for all kinds of cards
      */
@@ -28,9 +28,14 @@ public class Agent22181467 implements loveletter.Agent {
     //  RANDOM SUPPORT
     private Random rand;
 
+    //  RECORD PRIEST
+    private int[] priestSeen; //{SeenWho,SeenWhat}
+    boolean priestFound; // IF THE CARD PRIEST FOUND IS STILL ON HIS HAND
+
 
     public Agent22181467() {
         rand = new Random();    //  RANDOM SUPPORT
+        priestSeen = new int[2];
     }
 
     /**
@@ -55,11 +60,14 @@ public class Agent22181467 implements loveletter.Agent {
         //  EVERYONE CAN HAVE EVERY KIND OF CARDS NOW
         //  ADD ALL CARDS TO THE ESTIMATE HANDS
         int totalPlayer = current.numPlayers();
-        hand = new int[totalPlayer][9];
+        hands = new int[totalPlayer][9];
         for (int i = 0; i < totalPlayer; i++) {
-            Arrays.fill(hand[i], 1);
-            hand[i][0] = 0;
+            Arrays.fill(hands[i], 1);
+            hands[i][0] = 0;
         }
+        //  CLEAR VARIABLE
+        Arrays.fill(priestSeen, -1);
+        priestFound = false;
     }
 
     /**
@@ -77,7 +85,18 @@ public class Agent22181467 implements loveletter.Agent {
         //  REMOVE THIS CARD FROM THE ESTIMATE HANDS IF THERE'S NO MORE
         if (cards[act.card().value()] == 0)
             for (int i = 0; i < current.numPlayers(); i++)
-                hand[i][cardValue] = 0;
+                hands[i][cardValue] = 0;
+        //  RECORD MORE INFORMATION IF ACTION DID BY US
+        if (act.player() == myIndex) {
+            //  RECORD OUR PRIEST SEEN
+            if (act.card().value() == 2)
+                priestSeen = new int[]{act.target(), current.getCard(act.target()).value()};
+        } else if (act.player() == priestSeen[0]) {//  RECORD IF THE PLAYER IS RECORDED BY OUR PRIEST
+            //  IF HE PLAYS THIS CARD, DELETE THE RECORD
+            if (act.card().value() == priestSeen[1]) Arrays.fill(priestSeen, -1);
+            else priestFound = true;
+        }
+
 
     }
 
@@ -88,28 +107,41 @@ public class Agent22181467 implements loveletter.Agent {
      * @return the action the agent chooses to perform
      * @throws IllegalActionException when the Action produced is not legal.
      */
-    public Action playCard(Card c) {
+    public Action playCard(Card c) throws IllegalActionException {
         //  UPDATE THE GAME TIMES
         round++;
         //  GET A COPY AFTER GET CURRENT CARD
-        int[][] hand_new = hand.clone();
+        int[][] hand_new = hands.clone();
         int[] cards_new = cards.clone();
         cards_new[c.value()]--;
         if (cards_new[c.value()] == 0)
             for (int i = 0; i < current.numPlayers(); i++)
                 hand_new[i][c.value()] = 0;
 
-
         Action act = null;
-
         Card play;
-
+        int hand[] = {c.value(), current.getCard(myIndex).value()};
 
         while (!current.legalAction(act, c)) {
-            if (rand.nextDouble() < 0.5) play = c;
-            else play = current.getCard(myIndex);
-            if (play.value() == 8) continue;
+            if (rand.nextDouble() < 0.5) play = Card.values()[hand[0] - 1];
+            else play = Card.values()[hand[1] - 1];
             int target = rand.nextInt(current.numPlayers());
+            //  PRIORITY 0 SKIP PRINCESS
+            if (play.value() == 8) continue;
+            //  PRIORITY 2 PRIEST FOUND
+            if (priestFound) {
+                if (hand[0] == 1 || hand[1] == 1)
+                    if (priestSeen[1]>1)
+                        return Action.playGuard(myIndex, priestSeen[0], Card.values()[priestSeen[1] - 1]);
+                if (hand[0] == 3) {
+                    if (hand[1] > priestSeen[1]) return Action.playBaron(myIndex, priestSeen[0]);
+                } else if (hand[1] == 3) {
+                    if (hand[0] > priestSeen[1]) return Action.playBaron(myIndex, priestSeen[0]);
+                }
+            }
+            //  PRIORITY 4 USE HANDMAID
+            if (hand[0] == 4) play = Card.values()[hand[0] - 1];
+            if (hand[1] == 4) play = Card.values()[hand[1] - 1];
             try {
                 switch (play) {
                     case GUARD:
@@ -124,10 +156,10 @@ public class Agent22181467 implements loveletter.Agent {
                         //  GUESS FROM THE CARDS WHICH HAS TWO
                         int guessCard = 0;
                         for (int i = 2; i < 6; i++) {
-                            if (cards_new[i]==2) guessCard =i;
+                            if (cards_new[i] == 2) guessCard = i;
                         }
-                        while (hand_new[target][guessCard]==0) guessCard = rand.nextInt(7) + 1;
-                        act = Action.playGuard(myIndex, target, Card.values()[guessCard-1]);
+                        while (hand_new[target][guessCard] == 0) guessCard = rand.nextInt(7) + 1;
+                        act = Action.playGuard(myIndex, target, Card.values()[guessCard - 1]);
 
                         break;
                     case PRIEST:
