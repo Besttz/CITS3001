@@ -5,14 +5,15 @@ import loveletter.Card;
 import loveletter.IllegalActionException;
 import loveletter.State;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 public class Agent22181467 implements loveletter.Agent {
 
     /**
      * This is the array saving the possible card in users hand
      */
-    private ArrayList<Integer>[] hand;
+    private int[][] hand;
     /**
      * The cards left for all kinds of cards
      */
@@ -21,11 +22,15 @@ public class Agent22181467 implements loveletter.Agent {
      * The times of our agent to play cards
      */
     private int round;
-    private int index;
+    private int myIndex;
     private State current;
+
+    //  RANDOM SUPPORT
+    private Random rand;
 
 
     public Agent22181467() {
+        rand  = new Random();    //  RANDOM SUPPORT
     }
 
     /**
@@ -42,14 +47,16 @@ public class Agent22181467 implements loveletter.Agent {
      **/
     public void newRound(State start) {
         current = start;
-        index = start.getPlayerIndex();
-        hand = new ArrayList[current.numPlayers()];
-        index = start.getPlayerIndex();
+        //  GET CURRENT PLAYER ID
+        myIndex = start.getPlayerIndex();
         round = 0;
-        cards = new int[]{5, 2, 2, 2, 2, 1, 1, 1};
-        for (int i = 1; i <= 8; i++) hand[0].add(i);
-        for (int i = 1; i < current.numPlayers(); i++)
-            hand[i] = (ArrayList<Integer>) hand[0].clone();
+        //  RECORD THE REMAIN NUMBER OF EVERY CARDS
+        cards = new int[]{0, 5, 2, 2, 2, 2, 1, 1, 1};
+        //  EVERYONE CAN HAVE EVERY KIND OF CARDS NOW
+        //  ADD ALL CARDS TO THE ESTIMATE HANDS
+        int totalPlayer = current.numPlayers();
+        hand = new int[totalPlayer][9];
+        for (int i = 0; i < totalPlayer; i++) Arrays.fill(hand[i], 1);
     }
 
     /**
@@ -60,6 +67,13 @@ public class Agent22181467 implements loveletter.Agent {
      **/
     public void see(Action act, State results) {
         if (results.eliminated(results.getPlayerIndex())) return;
+        //  REDUCE THE NUMBER OF CARD IN THE cards ARRAY
+        int cardValue = act.card().value();
+        cards[cardValue]--;
+        //  REMOVE THIS CARD FROM THE ESTIMATE HANDS IF THERE'S NO MORE
+        if (cards[act.card().value()] == 0)
+            for (int i = 0; i < current.numPlayers(); i++)
+                hand[i][cardValue] = 0;
 
     }
 
@@ -71,6 +85,41 @@ public class Agent22181467 implements loveletter.Agent {
      * @throws IllegalActionException when the Action produced is not legal.
      */
     public Action playCard(Card c) {
-        return null;
+        Action act = null;
+
+        Card play;
+        while(!current.legalAction(act, c)){
+            if(rand.nextDouble()<0.5) play= c;
+            else play = current.getCard(myIndex);
+            int target = rand.nextInt(current.numPlayers());
+            try{
+                switch(play){
+                    case GUARD:
+                        act = Action.playGuard(myIndex, target, Card.values()[rand.nextInt(7)+1]);
+                        break;
+                    case PRIEST:
+                        act = Action.playPriest(myIndex, target);
+                        break;
+                    case BARON:
+                        act = Action.playBaron(myIndex, target);
+                        break;
+                    case HANDMAID:
+                        act = Action.playHandmaid(myIndex);
+                        break;
+                    case PRINCE:
+                        act = Action.playPrince(myIndex, target);
+                        break;
+                    case KING:
+                        act = Action.playKing(myIndex, target);
+                        break;
+                    case COUNTESS:
+                        act = Action.playCountess(myIndex);
+                        break;
+                    default:
+                        act = null;//never play princess
+                }
+            }catch(IllegalActionException e){/*do nothing*/}
+        }
+        return act;
     }
 }
