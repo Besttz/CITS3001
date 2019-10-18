@@ -90,8 +90,9 @@ public class Agent22181467 implements loveletter.Agent {
         //  RECORD MORE INFORMATION IF ACTION DID BY US
         if (act.player() == myIndex) {
             //  RECORD OUR PRIEST SEEN
-            if (act.card().value() == 2)
-                priestSeen = new int[]{act.target(), current.getCard(act.target()).value()};
+            if (act.card().value() == 2&&current.getCard(act.target()).value()!=-1){
+                priestSeen = new int[]{act.target(),current.getCard(act.target()).value() };
+            }
         } else if (act.player() == priestSeen[0]) {//  RECORD IF THE PLAYER IS RECORDED BY OUR PRIEST
             //  IF HE PLAYS THIS CARD, DELETE THE RECORD
             if (act.card().value() == priestSeen[1]) {
@@ -164,6 +165,8 @@ public class Agent22181467 implements loveletter.Agent {
             if (hand[0] == 4) play = Card.values()[hand[0] - 1];
             if (hand[1] == 4) play = Card.values()[hand[1] - 1];
 
+            //  S08
+
             //  PRIORITY 5 75% DON'T USE GUARD IN THE FIRST TWO ROUND
             if (round <= 2 && play.value() == 1 && rand.nextDouble() < 0.8)
                 continue;
@@ -210,7 +213,7 @@ public class Agent22181467 implements loveletter.Agent {
                         break;
                     case PRINCE:
                         //  S14 Don't play this to myself if I'm holding princess
-                        if (hand[0]==8||hand[1]==8&&target==myIndex) continue;
+                        if ((hand[0]==8||hand[1]==8)&&target==myIndex) continue;
                         act = Action.playPrince(myIndex, target);
                         break;
                     case KING:
