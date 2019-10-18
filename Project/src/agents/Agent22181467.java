@@ -144,7 +144,7 @@ public class Agent22181467 implements loveletter.Agent {
 
             //  PRIORITY 2 PRIEST FOUND
             //  IF THE USER STILL HOLD THE CARD SEEN BY US
-            if (priestFound && !current.eliminated(priestSeen[0])) {
+            if (priestFound && !current.eliminated(priestSeen[0])&&!current.handmaid(priestSeen[0])) {
                 if (hand[0] == 1 || hand[1] == 1)
                     if (priestSeen[1] > 1)
                         return Action.playGuard(myIndex, priestSeen[0], Card.values()[priestSeen[1] - 1]);
@@ -155,12 +155,17 @@ public class Agent22181467 implements loveletter.Agent {
                 }
             }
 
+            //  S9 IF THE GAME IS ENDING SOON, USE GUARD IF WE HAVE
+            if (current.deckSize()/current.numPlayers()<=2){
+                if (hand[0]==1||hand[1]==1) play=Card.values()[0];
+            }
+
             //  PRIORITY 4 USE HANDMAID
             if (hand[0] == 4) play = Card.values()[hand[0] - 1];
             if (hand[1] == 4) play = Card.values()[hand[1] - 1];
 
             //  PRIORITY 5 75% DON'T USE GUARD IN THE FIRST TWO ROUND
-            if (round <= 2 && play.value() == 1 && rand.nextDouble() < 0.75)
+            if (round <= 2 && play.value() == 1 && rand.nextDouble() < 0.8)
                 continue;
             try {
                 switch (play) {
@@ -205,7 +210,7 @@ public class Agent22181467 implements loveletter.Agent {
                         break;
                     case PRINCE:
                         //  S14 Don't play this to myself if I'm holding princess
-                        if (hand[0]==8||hand[1]==8&&target==myIndex)
+                        if (hand[0]==8||hand[1]==8&&target==myIndex) continue;
                         act = Action.playPrince(myIndex, target);
                         break;
                     case KING:
