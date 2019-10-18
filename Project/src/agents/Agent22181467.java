@@ -153,6 +153,12 @@ public class Agent22181467 implements loveletter.Agent {
                     if (hand[1] > priestSeen[1]) return Action.playBaron(myIndex, priestSeen[0]);
                 } else if (hand[1] == 3) {
                     if (hand[0] > priestSeen[1]) return Action.playBaron(myIndex, priestSeen[0]);
+                } else if (hand[0] == 6 || hand[1] == 6) {//  S18 S19 EXCHANGE PRINCESS AND COUNTESS
+                    if (priestSeen[1] == 7) return Action.playKing(myIndex, priestSeen[0]);
+                    if (priestSeen[1] == 8 && current.deckSize() / current.numPlayers() <= 1)
+                        return Action.playKing(myIndex, priestSeen[0]);
+                } else if (hand[0] == 5 || hand[1] == 5) { // S19 PRINCE TO PRINCESS
+                    if (priestSeen[1] == 8) return Action.playPrince(myIndex, priestSeen[0]);
                 }
             }
 
@@ -168,16 +174,16 @@ public class Agent22181467 implements loveletter.Agent {
             //  S08 S16 THE RULE TO USE BARON
             if ((hand[0] == 8 && hand[1] == 3) || (hand[1] == 8 && hand[0] == 3))
                 return Action.playBaron(myIndex, generateTarget());
-            if (hand[0] == 3){// CHECK IF OUR CARD IS THE HIGHEST
+            if (hand[0] == 3) {// CHECK IF OUR CARD IS THE HIGHEST
                 int i = 8;
-                for (; i > hand[1] ; i++)
-                    if (cards_new[i]>=1) break;
-                if (i==hand[1]) return Action.playBaron(myIndex, generateTarget());
-            } else if (hand[1] == 3){
+                for (; i > hand[1]; i++)
+                    if (cards_new[i] >= 1) break;
+                if (i == hand[1]) return Action.playBaron(myIndex, generateTarget());
+            } else if (hand[1] == 3) {
                 int i = 8;
-                for (; i > hand[0] ; i++)
-                    if (cards_new[i]>=1) break;
-                if (i==hand[0]) return Action.playBaron(myIndex, generateTarget());
+                for (; i > hand[0]; i++)
+                    if (cards_new[i] >= 1) break;
+                if (i == hand[0]) return Action.playBaron(myIndex, generateTarget());
             }
 
             //  PRIORITY 5 75% DON'T USE GUARD IN THE FIRST TWO ROUND
@@ -223,16 +229,16 @@ public class Agent22181467 implements loveletter.Agent {
                         if (hand[0] == 1 || hand[1] == 1) continue;
                         //  S17 IF THE WINING CHANCE IS LOWER THAN 50% 90% DON'T USE
                         int total = 0;
-                        if (hand[0] == 3){// CHECK IF OUR CARD IS THE HIGHEST
+                        if (hand[0] == 3) {// CHECK IF OUR CARD IS THE HIGHEST
                             int i = 1;
-                            for (; i < hand[1] ; i++)
+                            for (; i < hand[1]; i++)
                                 total += cards_new[i];
-                            if ((double)total/16<0.5&&rand.nextDouble() < 0.9) continue;
-                        } else if (hand[1] == 3){
+                            if ((double) total / 16 < 0.5 && rand.nextDouble() < 0.9) continue;
+                        } else if (hand[1] == 3) {
                             int i = 1;
-                            for (; i < hand[0] ; i++)
+                            for (; i < hand[0]; i++)
                                 total += cards_new[i];
-                            if ((double)total/16<0.5&&rand.nextDouble() < 0.9) continue;
+                            if ((double) total / 16 < 0.5 && rand.nextDouble() < 0.9) continue;
                         }
 
                         act = Action.playBaron(myIndex, target);
