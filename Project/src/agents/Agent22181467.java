@@ -204,6 +204,8 @@ public class Agent22181467 implements loveletter.Agent {
                         act = Action.playHandmaid(myIndex);
                         break;
                     case PRINCE:
+                        //  S14 Don't play this to myself if I'm holding princess
+                        if (hand[0]==8||hand[1]==8&&target==myIndex)
                         act = Action.playPrince(myIndex, target);
                         break;
                     case KING:
