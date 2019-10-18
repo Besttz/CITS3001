@@ -95,6 +95,8 @@ public class Agent22181467 implements loveletter.Agent {
             //  IF HE PLAYS THIS CARD, DELETE THE RECORD
             if (act.card().value() == priestSeen[1]) Arrays.fill(priestSeen, -1);
             else priestFound = true;
+        } else if (act.target()== priestSeen[0]){//  RECORD IF THE TARGET IS RECORDED BY OUR PRIEST
+            if (act.card().value() ==5 ||act.card().value() == 6) Arrays.fill(priestSeen, -1);
         }
 
 
@@ -129,7 +131,8 @@ public class Agent22181467 implements loveletter.Agent {
             //  PRIORITY 0 SKIP PRINCESS
             if (play.value() == 8) continue;
             //  PRIORITY 2 PRIEST FOUND
-            if (priestFound) {
+            //  IF THE USER STILL HOLD THE CARD SEEN BY US
+            if (priestFound&&!current.eliminated(priestSeen[0])) {
                 if (hand[0] == 1 || hand[1] == 1)
                     if (priestSeen[1]>1)
                         return Action.playGuard(myIndex, priestSeen[0], Card.values()[priestSeen[1] - 1]);
