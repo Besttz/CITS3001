@@ -82,11 +82,18 @@ public class Agent22181467 implements loveletter.Agent {
         current = results;
         //  REDUCE THE NUMBER OF CARD IN THE cards ARRAY
         int cardValue = act.card().value();
-        cards[cardValue]--;
-        //  REMOVE THIS CARD FROM THE ESTIMATE HANDS IF THERE'S NO MORE
-        if (cards[act.card().value()] == 0)
-            for (int i = 0; i < current.numPlayers(); i++)
-                hands[i][cardValue] = 0;
+        seeCard(cardValue);
+        //  RECORD THE CARD WE SEEN
+        if (cardValue == 1) {
+            // DO THINGS IF WE SEE A GUARD PERFORMING
+        } else if (cardValue == 3) {
+
+        } else if (cardValue == 5) {
+            seeCard(current.getDiscards(act.target()).next().value());
+            //  RECORD THE CARD FROM THE TARGET
+        }
+
+
         //  RECORD MORE INFORMATION IF ACTION DID BY US
         if (act.player() == myIndex) {
             //  RECORD OUR PRIEST SEEN
@@ -180,17 +187,17 @@ public class Agent22181467 implements loveletter.Agent {
                 return Action.playBaron(myIndex, generateTarget());
             if (hand[0] == 3) {// CHECK IF OUR CARD IS THE HIGHEST
                 int i = 8;
-                for (; i > hand[1]; i++)
+                for (; i > hand[1]; i--)
                     if (cards_new[i] >= 1) break;
                 if (i == hand[1]) return Action.playBaron(myIndex, generateTarget());
             } else if (hand[1] == 3) {
                 int i = 8;
-                for (; i > hand[0]; i++)
+                for (; i > hand[0]; i--)
                     if (cards_new[i] >= 1) break;
                 if (i == hand[0]) return Action.playBaron(myIndex, generateTarget());
             }
             //  S20 IF THE CARD IS MORE THAN 5, 50% USE BARON
-            if (hand[0] >= 5 || hand[1] >= 5 && (hand[0] == 3 || hand[1] == 3) && rand.nextDouble() > 0.5)
+            if ((hand[0] >= 5 || hand[1] >= 5) && (hand[0] == 3 || hand[1] == 3) && rand.nextDouble() > 0.5)
                 return Action.playBaron(myIndex, generateTarget());
 
             //  PRIORITY 5 75% DON'T USE GUARD IN THE FIRST TWO ROUND
@@ -301,5 +308,13 @@ public class Agent22181467 implements loveletter.Agent {
                 target++;
         }
         return target;
+    }
+
+    private void seeCard(int cardValue) {
+        cards[cardValue]--;
+        //  REMOVE THIS CARD FROM THE ESTIMATE HANDS IF THERE'S NO MORE
+        if (cards[cardValue] == 0)
+            for (int i = 0; i < current.numPlayers(); i++)
+                hands[i][cardValue] = 0;
     }
 }
