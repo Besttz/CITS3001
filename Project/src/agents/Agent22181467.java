@@ -90,8 +90,8 @@ public class Agent22181467 implements loveletter.Agent {
         //  RECORD MORE INFORMATION IF ACTION DID BY US
         if (act.player() == myIndex) {
             //  RECORD OUR PRIEST SEEN
-            if (act.card().value() == 2&&current.getCard(act.target()).value()!=-1){
-                priestSeen = new int[]{act.target(),current.getCard(act.target()).value() };
+            if (act.card().value() == 2 && current.getCard(act.target())!= null) {
+                priestSeen = new int[]{act.target(), current.getCard(act.target()).value()};
             }
         } else if (act.player() == priestSeen[0]) {//  RECORD IF THE PLAYER IS RECORDED BY OUR PRIEST
             //  IF HE PLAYS THIS CARD, DELETE THE RECORD
@@ -103,7 +103,7 @@ public class Agent22181467 implements loveletter.Agent {
             if (act.card().value() == 5) {
                 Arrays.fill(priestSeen, -1);
                 priestFound = false;
-            } else if (act.card().value() == 6){// S12 THE CARD SEEN BY US IS EXCHANGED
+            } else if (act.card().value() == 6) {// S12 THE CARD SEEN BY US IS EXCHANGED
                 priestSeen[0] = act.player();
                 priestFound = true;
             }
@@ -145,7 +145,7 @@ public class Agent22181467 implements loveletter.Agent {
 
             //  PRIORITY 2 PRIEST FOUND
             //  IF THE USER STILL HOLD THE CARD SEEN BY US
-            if (priestFound && !current.eliminated(priestSeen[0])&&!current.handmaid(priestSeen[0])) {
+            if (priestFound && !current.eliminated(priestSeen[0]) && !current.handmaid(priestSeen[0])) {
                 if (hand[0] == 1 || hand[1] == 1)
                     if (priestSeen[1] > 1)
                         return Action.playGuard(myIndex, priestSeen[0], Card.values()[priestSeen[1] - 1]);
@@ -157,8 +157,8 @@ public class Agent22181467 implements loveletter.Agent {
             }
 
             //  S9 IF THE GAME IS ENDING SOON, USE GUARD IF WE HAVE
-            if (current.deckSize()/current.numPlayers()<=2){
-                if (hand[0]==1||hand[1]==1) play=Card.values()[0];
+            if (current.deckSize() / current.numPlayers() <= 2) {
+                if (hand[0] == 1 || hand[1] == 1) play = Card.values()[0];
             }
 
             //  PRIORITY 4 USE HANDMAID
@@ -201,11 +201,13 @@ public class Agent22181467 implements loveletter.Agent {
 
                         break;
                     case PRIEST:
+                        if (target == myIndex || current.eliminated(target) || current.handmaid(target))
+                            target = generateTarget();
                         act = Action.playPriest(myIndex, target);
                         break;
                     case BARON:
                         //  S13 Don't use Baron if we're hoding 1
-                        if (hand[0]==1||hand[1]==1) continue;
+                        if (hand[0] == 1 || hand[1] == 1) continue;
                         act = Action.playBaron(myIndex, target);
                         break;
                     case HANDMAID:
@@ -213,7 +215,8 @@ public class Agent22181467 implements loveletter.Agent {
                         break;
                     case PRINCE:
                         //  S14 Don't play this to myself if I'm holding princess
-                        if ((hand[0]==8||hand[1]==8)&&target==myIndex) continue;
+                        if (hand[0] == 8 || hand[1] == 8)
+                            target = generateTarget();
                         act = Action.playPrince(myIndex, target);
                         break;
                     case KING:
@@ -228,5 +231,28 @@ public class Agent22181467 implements loveletter.Agent {
             } catch (IllegalActionException e) {/*do nothing*/}
         }
         return act;
+    }
+
+
+    private int generateTarget() {
+        int target = 0;
+        //  CHECK IF EVERYONE IS DIED OR HANDMAIDED
+        int number = 0;
+        for (int i = 0; i < current.numPlayers(); i++) {
+            if (i == myIndex) continue;
+            if (current.eliminated(i)) number++;
+            else if (current.handmaid(i)) number++;
+        }
+        if (number == current.numPlayers() - 1) {
+            target = myIndex;
+            while (target == myIndex)
+                target = rand.nextInt(current.numPlayers());
+
+        } else {
+            target = 0;
+            while (target == myIndex || current.eliminated(target) || current.handmaid(target))
+                target++;
+        }
+        return target;
     }
 }
