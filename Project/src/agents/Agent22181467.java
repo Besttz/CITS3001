@@ -93,8 +93,10 @@ public class Agent22181467 implements loveletter.Agent {
                 priestSeen = new int[]{act.target(), current.getCard(act.target()).value()};
         } else if (act.player() == priestSeen[0]) {//  RECORD IF THE PLAYER IS RECORDED BY OUR PRIEST
             //  IF HE PLAYS THIS CARD, DELETE THE RECORD
-            if (act.card().value() == priestSeen[1]) Arrays.fill(priestSeen, -1);
-            else priestFound = true;
+            if (act.card().value() == priestSeen[1]) {
+                Arrays.fill(priestSeen, -1);
+                priestFound = false;
+            } else priestFound = true;
         } else if (act.target() == priestSeen[0]) {//  RECORD IF THE TARGET IS RECORDED BY OUR PRIEST
             if (act.card().value() == 5 || act.card().value() == 6) {
                 Arrays.fill(priestSeen, -1);
