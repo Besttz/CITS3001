@@ -151,6 +151,48 @@ public class Agent22181467 implements loveletter.Agent {
             else play = Card.values()[hand[1] - 1];
 
             int target = rand.nextInt(current.numPlayers());
+            //  FOR ROUND ONW
+            if (round == 1) {
+                if (hand[0] == 4 || hand[1] == 4) return Action.playHandmaid(myIndex);
+                else if (hand[0] == 1) {
+                    if (hand[1] == 5) {
+                        return Action.playPrince(myIndex, generateTarget());
+                    } else if (hand[1] == 4) {
+                        return Action.playHandmaid(myIndex);
+                    } else if (hand[1] == 2) {
+                        return Action.playPriest(myIndex, generateTarget());
+                    } else if (hand[1] == 3) {
+                        play = Card.values()[0];
+                    } else if (hand[1] == 6) {
+                        play = Card.values()[0];
+                    } else if (hand[1] == 7) {
+                        play = Card.values()[0];
+                    }
+                } else if (hand[1] == 1) {
+                    if (hand[0] == 5) {
+                        return Action.playPrince(myIndex, generateTarget());
+                    } else if (hand[0] == 4) {
+                        return Action.playHandmaid(myIndex);
+                    } else if (hand[0] == 2) {
+                        return Action.playPriest(myIndex, generateTarget());
+                    } else if (hand[0] == 3) {
+                        play = Card.values()[0];
+                    } else if (hand[0] == 6) {
+                        play = Card.values()[0];
+                    } else if (hand[0] == 7) {
+                        play = Card.values()[0];
+                    }
+                } else if (hand[0] == 3) {
+                    if (hand[1] == 7) return Action.playBaron(myIndex, generateTarget());
+                    else if (hand[1] == 2)
+                        return Action.playPriest(myIndex, generateTarget());
+
+                } else if (hand[1] == 3) {
+                    if (hand[0] == 7) return Action.playBaron(myIndex, generateTarget());
+                    else if (hand[0] == 2)
+                        return Action.playPriest(myIndex, generateTarget());
+                }
+            }
             //  PRIORITY 0 SKIP PRINCESS
             if (play.value() == 8) continue;
 
@@ -204,9 +246,9 @@ public class Agent22181467 implements loveletter.Agent {
             if (round <= 2 && play.value() == 1 && rand.nextDouble() < 0.8)
                 continue;
             //  S21 USE THE SMALLER CARD IN THE LAST TWO ROUND (75%)
-            if ((current.deckSize() / current.numPlayers() <= 2)&&rand.nextDouble() < 0.75){
-                if (hand[0]<hand[1])  play = Card.values()[hand[1] - 1];
-                else  play = Card.values()[hand[0] - 1];
+            if ((current.deckSize() / current.numPlayers() <= 2) && rand.nextDouble() < 0.75) {
+                if (hand[0] < hand[1]) play = Card.values()[hand[1] - 1];
+                else play = Card.values()[hand[0] - 1];
             }
             try {
                 switch (play) {
@@ -267,16 +309,17 @@ public class Agent22181467 implements loveletter.Agent {
                         break;
                     case PRINCE:
 
+
+                        //  S22 Use Prince on others first
+                        if (target == myIndex && rand.nextDouble() < 0.9) continue;
                         //  S14 Don't play this to myself if I'm holding princess
                         if (hand[0] == 8 || hand[1] == 8)
                             target = generateTarget();
                         act = Action.playPrince(myIndex, target);
-                        //  S22 Use Prince on others first
-                        if (target==myIndex && rand.nextDouble() < 0.9) continue;
                         //  KILL MYSELF IF  CAN'T MOVE
                         if (current.legalAction(act, c))
                             act = Action.playPrince(myIndex, myIndex);
-                        if (times > 50) {
+                        if (times > 150) {
                             act = Action.playPrince(myIndex, myIndex);
                         }
                         break;
