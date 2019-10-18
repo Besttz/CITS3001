@@ -206,7 +206,7 @@ public class Agent22181467 implements loveletter.Agent {
             //  S21 USE THE SMALLER CARD IN THE LAST TWO ROUND (75%)
             if ((current.deckSize() / current.numPlayers() <= 2)&&rand.nextDouble() < 0.75){
                 if (hand[0]<hand[1])  play = Card.values()[hand[1] - 1];
-                else  play = Card.values()[hand[0] - 1]
+                else  play = Card.values()[hand[0] - 1];
             }
             try {
                 switch (play) {
@@ -266,16 +266,19 @@ public class Agent22181467 implements loveletter.Agent {
                         act = Action.playHandmaid(myIndex);
                         break;
                     case PRINCE:
-                        if (times > 50) {
-                            act = Action.playPrince(myIndex, myIndex);
-                        }
+
                         //  S14 Don't play this to myself if I'm holding princess
                         if (hand[0] == 8 || hand[1] == 8)
                             target = generateTarget();
                         act = Action.playPrince(myIndex, target);
+                        //  S22 Use Prince on others first
+                        if (target==myIndex && rand.nextDouble() < 0.9) continue;
                         //  KILL MYSELF IF  CAN'T MOVE
                         if (current.legalAction(act, c))
                             act = Action.playPrince(myIndex, myIndex);
+                        if (times > 50) {
+                            act = Action.playPrince(myIndex, myIndex);
+                        }
                         break;
                     case KING:
                         act = Action.playKing(myIndex, target);
