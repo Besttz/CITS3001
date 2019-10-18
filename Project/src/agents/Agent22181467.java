@@ -134,7 +134,11 @@ public class Agent22181467 implements loveletter.Agent {
         Card play;
         int hand[] = {c.value(), current.getCard(myIndex).value()};
 
+        int times = 0;
+
         while (!current.legalAction(act, c)) {
+            times++;
+
             //  GENERATE RANDOM CARD TO USE
             if (rand.nextDouble() < 0.5) play = Card.values()[hand[0] - 1];
             else play = Card.values()[hand[1] - 1];
@@ -185,6 +189,9 @@ public class Agent22181467 implements loveletter.Agent {
                     if (cards_new[i] >= 1) break;
                 if (i == hand[0]) return Action.playBaron(myIndex, generateTarget());
             }
+            //  S20 IF THE CARD IS MORE THAN 5, 50% USE BARON
+            if (hand[0] >= 5 || hand[1] >= 5 && (hand[0] == 3 || hand[1] == 3) && rand.nextDouble() > 0.5)
+                return Action.playBaron(myIndex, generateTarget());
 
             //  PRIORITY 5 75% DON'T USE GUARD IN THE FIRST TWO ROUND
             if (round <= 2 && play.value() == 1 && rand.nextDouble() < 0.8)
@@ -247,6 +254,9 @@ public class Agent22181467 implements loveletter.Agent {
                         act = Action.playHandmaid(myIndex);
                         break;
                     case PRINCE:
+                        if (times > 50) {
+                            act = Action.playPrince(myIndex, myIndex);
+                        }
                         //  S14 Don't play this to myself if I'm holding princess
                         if (hand[0] == 8 || hand[1] == 8)
                             target = generateTarget();
@@ -264,6 +274,7 @@ public class Agent22181467 implements loveletter.Agent {
                     default:
                         act = null;//never play princess
                 }
+
             } catch (IllegalActionException e) {/*do nothing*/}
         }
         return act;
