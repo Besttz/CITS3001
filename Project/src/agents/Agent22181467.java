@@ -145,6 +145,9 @@ public class Agent22181467 implements loveletter.Agent {
             //  PRIORITY 4 USE HANDMAID
             if (hand[0] == 4) play = Card.values()[hand[0] - 1];
             if (hand[1] == 4) play = Card.values()[hand[1] - 1];
+            //  PRIORITY 5 75% DON'T USE GUARD IN THE FIRST TWO ROUND
+            if (round<=2&&play.value()==1&&rand.nextDouble() < 0.75)
+                continue;
             try {
                 switch (play) {
                     case GUARD:
