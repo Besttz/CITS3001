@@ -219,8 +219,22 @@ public class Agent22181467 implements loveletter.Agent {
                         act = Action.playPriest(myIndex, target);
                         break;
                     case BARON:
-                        //  S13 Don't use Baron if we're hoding 1
+                        //  S13 Don't use Baron if we're holding 1
                         if (hand[0] == 1 || hand[1] == 1) continue;
+                        //  S17 IF THE WINING CHANCE IS LOWER THAN 50% 90% DON'T USE
+                        int total = 0;
+                        if (hand[0] == 3){// CHECK IF OUR CARD IS THE HIGHEST
+                            int i = 1;
+                            for (; i < hand[1] ; i++)
+                                total += cards_new[i];
+                            if ((double)total/16<0.5&&rand.nextDouble() < 0.9) continue;
+                        } else if (hand[1] == 3){
+                            int i = 1;
+                            for (; i < hand[0] ; i++)
+                                total += cards_new[i];
+                            if ((double)total/16<0.5&&rand.nextDouble() < 0.9) continue;
+                        }
+
                         act = Action.playBaron(myIndex, target);
                         break;
                     case HANDMAID:
