@@ -34,7 +34,7 @@ public class Agent22181467 implements loveletter.Agent {
 
 
     public Agent22181467() {
-        rand = new Random();    //  RANDOM SUPPORT
+        rand = new Random(System.nanoTime());    //  RANDOM SUPPORT
         priestSeen = new int[2];
     }
 
@@ -51,6 +51,7 @@ public class Agent22181467 implements loveletter.Agent {
      * @param start the initial state of the round
      **/
     public void newRound(State start) {
+        rand = new Random(System.nanoTime());    //  RANDOM SUPPORT
         current = start;
         //  GET CURRENT PLAYER ID
         myIndex = start.getPlayerIndex();
@@ -98,9 +99,12 @@ public class Agent22181467 implements loveletter.Agent {
                 priestFound = false;
             } else priestFound = true;
         } else if (act.target() == priestSeen[0]) {//  RECORD IF THE TARGET IS RECORDED BY OUR PRIEST
-            if (act.card().value() == 5 || act.card().value() == 6) {
+            if (act.card().value() == 5) {
                 Arrays.fill(priestSeen, -1);
                 priestFound = false;
+            } else if (act.card().value() == 6){// S12 THE CARD SEEN BY US IS EXCHANGED
+                priestSeen[0] = act.player();
+                priestFound = true;
             }
         }
 
@@ -130,11 +134,14 @@ public class Agent22181467 implements loveletter.Agent {
         int hand[] = {c.value(), current.getCard(myIndex).value()};
 
         while (!current.legalAction(act, c)) {
+            //  GENERATE RANDOM CARD TO USE
             if (rand.nextDouble() < 0.5) play = Card.values()[hand[0] - 1];
             else play = Card.values()[hand[1] - 1];
+
             int target = rand.nextInt(current.numPlayers());
             //  PRIORITY 0 SKIP PRINCESS
             if (play.value() == 8) continue;
+
             //  PRIORITY 2 PRIEST FOUND
             //  IF THE USER STILL HOLD THE CARD SEEN BY US
             if (priestFound && !current.eliminated(priestSeen[0])) {
@@ -147,9 +154,11 @@ public class Agent22181467 implements loveletter.Agent {
                     if (hand[0] > priestSeen[1]) return Action.playBaron(myIndex, priestSeen[0]);
                 }
             }
+
             //  PRIORITY 4 USE HANDMAID
             if (hand[0] == 4) play = Card.values()[hand[0] - 1];
             if (hand[1] == 4) play = Card.values()[hand[1] - 1];
+
             //  PRIORITY 5 75% DON'T USE GUARD IN THE FIRST TWO ROUND
             if (round <= 2 && play.value() == 1 && rand.nextDouble() < 0.75)
                 continue;
@@ -164,7 +173,7 @@ public class Agent22181467 implements loveletter.Agent {
                             if (current.handmaid(i)) continue;
                             if (current.score(i) >= highmark) target = i;
                         }
-                        //  S6 GUESS FROM THE CARDS WHICH HAS TWO
+                        //  S6 S7 GUESS FROM THE CARDS WHICH HAS TWO
                         int guessCard = 0;
                         if (cards_new[4] == 2 && hand_new[target][4] == 1) guessCard = 4;
                         if (cards_new[2] == 2 && hand_new[target][2] == 1) guessCard = 2;
@@ -187,6 +196,8 @@ public class Agent22181467 implements loveletter.Agent {
                         act = Action.playPriest(myIndex, target);
                         break;
                     case BARON:
+                        //  S13 Don't use Baron if we're hoding 1
+                        if (hand[0]==1||hand[1]==1) continue;
                         act = Action.playBaron(myIndex, target);
                         break;
                     case HANDMAID:

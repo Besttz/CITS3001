@@ -30,7 +30,7 @@ public class LoveLetter{
    * Defauklt construct with system random seed, and System.out as the PrintStream
    * **/
   public LoveLetter(){
-    this(0,System.out);
+    this(System.nanoTime(),System.out);
     this.ps = System.out;
   }
 
