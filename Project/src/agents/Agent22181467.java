@@ -203,6 +203,11 @@ public class Agent22181467 implements loveletter.Agent {
             //  PRIORITY 5 75% DON'T USE GUARD IN THE FIRST TWO ROUND
             if (round <= 2 && play.value() == 1 && rand.nextDouble() < 0.8)
                 continue;
+            //  S21 USE THE SMALLER CARD IN THE LAST TWO ROUND (75%)
+            if ((current.deckSize() / current.numPlayers() <= 2)&&rand.nextDouble() < 0.75){
+                if (hand[0]<hand[1])  play = Card.values()[hand[1] - 1];
+                else  play = Card.values()[hand[0] - 1]
+            }
             try {
                 switch (play) {
                     case GUARD:
