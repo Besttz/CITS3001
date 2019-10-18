@@ -90,7 +90,7 @@ public class Agent22181467 implements loveletter.Agent {
         //  RECORD MORE INFORMATION IF ACTION DID BY US
         if (act.player() == myIndex) {
             //  RECORD OUR PRIEST SEEN
-            if (act.card().value() == 2 && current.getCard(act.target())!= null) {
+            if (act.card().value() == 2 && current.getCard(act.target()) != null) {
                 priestSeen = new int[]{act.target(), current.getCard(act.target()).value()};
             }
         } else if (act.player() == priestSeen[0]) {//  RECORD IF THE PLAYER IS RECORDED BY OUR PRIEST
@@ -165,7 +165,20 @@ public class Agent22181467 implements loveletter.Agent {
             if (hand[0] == 4) play = Card.values()[hand[0] - 1];
             if (hand[1] == 4) play = Card.values()[hand[1] - 1];
 
-            //  S08
+            //  S08 S16 THE RULE TO USE BARON
+            if ((hand[0] == 8 && hand[1] == 3) || (hand[1] == 8 && hand[0] == 3))
+                return Action.playBaron(myIndex, generateTarget());
+            if (hand[0] == 3){// CHECK IF OUR CARD IS THE HIGHEST
+                int i = 8;
+                for (; i > hand[1] ; i++)
+                    if (cards_new[i]>=1) break;
+                if (i==hand[1]) return Action.playBaron(myIndex, generateTarget());
+            } else if (hand[1] == 3){
+                int i = 8;
+                for (; i > hand[0] ; i++)
+                    if (cards_new[i]>=1) break;
+                if (i==hand[0]) return Action.playBaron(myIndex, generateTarget());
+            }
 
             //  PRIORITY 5 75% DON'T USE GUARD IN THE FIRST TWO ROUND
             if (round <= 2 && play.value() == 1 && rand.nextDouble() < 0.8)
@@ -218,6 +231,9 @@ public class Agent22181467 implements loveletter.Agent {
                         if (hand[0] == 8 || hand[1] == 8)
                             target = generateTarget();
                         act = Action.playPrince(myIndex, target);
+                        //  KILL MYSELF IF  CAN'T MOVE
+                        if (current.legalAction(act, c))
+                            act = Action.playPrince(myIndex, myIndex);
                         break;
                     case KING:
                         act = Action.playKing(myIndex, target);
