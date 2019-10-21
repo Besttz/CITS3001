@@ -79,6 +79,7 @@ public class Agent22181467 implements loveletter.Agent {
      **/
     public void see(Action act, State results) {
         if (results.eliminated(results.getPlayerIndex())) return;
+        State old = current;
         current = results;
         //  REDUCE THE NUMBER OF CARD IN THE cards ARRAY
         int cardValue = act.card().value();
@@ -113,6 +114,13 @@ public class Agent22181467 implements loveletter.Agent {
             } else if (act.card().value() == 6) {// S12 THE CARD SEEN BY US IS EXCHANGED
                 priestSeen[0] = act.player();
                 priestFound = true;
+            }
+        } else if (act.target() == myIndex){ // S23 SEEN AS PRIESTSEEN IF WE'RE TARGET OF KNG
+            if (act.card().value() == 6) {
+                priestFound = true;
+                priestSeen[0] = act.player();
+                priestSeen[1] = old.getCard(myIndex).value();
+
             }
         }
 
