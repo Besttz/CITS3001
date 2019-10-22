@@ -155,7 +155,7 @@ public class Agent22374571 implements loveletter.Agent {
 
         //  START TO DETERMINE BY STRATEGY
         Action act = null;
-        Card play;
+        Card play = null;
         //  THE FIRST ROUND STRATEGIES
         //  FOR ROUND ONW
         if (round == 1) {
@@ -189,12 +189,13 @@ public class Agent22374571 implements loveletter.Agent {
                     play = Card.values()[0];
                 }
             } else if (hand[0] == 3) {
-                if (hand[1] == 7) return Action.playBaron(myIndex, generateTarget());
+                if (hand[1] >= 5) return Action.playBaron(myIndex, generateTarget());
+
                 else if (hand[1] == 2)
                     return Action.playPriest(myIndex, generateTarget());
 
             } else if (hand[1] == 3) {
-                if (hand[0] == 7) return Action.playBaron(myIndex, generateTarget());
+                if (hand[0] >= 5) return Action.playBaron(myIndex, generateTarget());
                 else if (hand[0] == 2)
                     return Action.playPriest(myIndex, generateTarget());
             }
@@ -205,7 +206,7 @@ public class Agent22374571 implements loveletter.Agent {
         int baronTarget = 0;
         int kingPrinceTarget = 0;
 
-        int cardPoint[] = {0, 0};
+        double cardPoint[] = {0.0, 0.0};
 
         for (int i = 0; i < 2; i++) {
             //  S0 SKIP PRINCESS
@@ -236,21 +237,22 @@ public class Agent22374571 implements loveletter.Agent {
             if (hand[i] == 4) return Action.playHandmaid(myIndex);
 
             //  S4 IF HOLDING COUNTESS IN THE FIRST TWO ROUND, PLAY IT
-            if (round <= 2 && hand[i] == 7) return Action.playHandmaid(myIndex);
+            if (round <= 2 && hand[i] == 7) return Action.playCountess(myIndex);
 
             //  S5 80% DON'T PLAY GUARD IN THE FIRST TWO ROUNDS
             if (round <= 2 && rand.nextDouble() < 0.8) cardPoint[i] = 0;
 
             //  S6 THE CARD POINT OF GUARD
             if (hand[i] == 1) {
-                int[] cardPossiblity = new int[current.numPlayers()];
+                double[] cardPossiblity = new double[current.numPlayers()];
                 for (int j = 0; j < current.numPlayers(); j++) {
                     if (j == myIndex) continue;
+                    if (current.handmaid(j)||current.eliminated(j)) continue;
                     for (int k = 0; k < 9; k++)
                         if (hand_new[j][k] == 1) cardPossiblity[j]++;
                 }
                 int minPlayer = -1;
-                int minHand = 10;
+                double minHand = 10;
                 int times = 0;
                 for (int j = 0; j < current.numPlayers(); j++) {
                     if (cardPossiblity[j] == 0) continue;
@@ -261,7 +263,7 @@ public class Agent22374571 implements loveletter.Agent {
                     }
                 }
                 guardTarget = minPlayer;
-                if (times == current.numPlayers() - 1)
+                if (times == current.numPlayers() - 1||guardTarget== -1)
                     guardTarget = generateTarget();
                 cardPoint[i] = 10 / minHand;
             } else if (hand[i] == 2) {
@@ -274,7 +276,7 @@ public class Agent22374571 implements loveletter.Agent {
             } else if (hand[i] == 3) {
                 int our = hand[1 - i];
                 if (our==1) cardPoint[i] = -1;
-                int[] winPossiblity = new int[current.numPlayers()];
+                double[] winPossiblity = new double[current.numPlayers()];
                 for (int j = 0; j < current.numPlayers(); j++) {
                     if (j == myIndex) continue;
                     if (current.handmaid(j)||current.eliminated(j)) continue;
@@ -285,7 +287,7 @@ public class Agent22374571 implements loveletter.Agent {
                     winPossiblity[j] /= current.deckSize();
                 }
                 int maxPlayer = -1;
-                int maxWin = -1;
+                double maxWin = -1;
                 int times = 0;
                 for (int j = 0; j < current.numPlayers(); j++) {
                     if (winPossiblity[j] == 0) continue;
@@ -301,6 +303,11 @@ public class Agent22374571 implements loveletter.Agent {
                 cardPoint[i] = maxWin;
 
             } else if (hand[i] == 5) {
+                if (hand[1-i]==8){
+                    kingPrinceTarget = generateTarget();
+                    if (current.handmaid(kingPrinceTarget))
+                        return Action.playPrince(myIndex,myIndex);
+                }
                 if (seenBaron != -1){
                     kingPrinceTarget = seenBaron;
                 } else kingPrinceTarget = generateTarget();
@@ -324,8 +331,10 @@ public class Agent22374571 implements loveletter.Agent {
         }
 
         //  PLAY THE CARD WITH HIGHEST POINT
-        if (cardPoint[0]>cardPoint[1]) play=Card.values()[hand[0]-1];
-        else play=Card.values()[hand[1]-1];
+        if (play==null) {
+            if (cardPoint[0] > cardPoint[1]) play = Card.values()[hand[0] - 1];
+            else play = Card.values()[hand[1] - 1];
+        }
 
         try {
             switch (play) {
@@ -351,7 +360,7 @@ public class Agent22374571 implements loveletter.Agent {
 
                     break;
                 case PRIEST:
-                    if (seenBaron!=-1) act = Action.playPriest(myIndex, seenBaron);
+                    if (vaildPlayer(seenBaron)) act = Action.playPriest(myIndex, seenBaron);
                     else act = Action.playPriest(myIndex, generateTarget());
                     break;
                 case BARON:
@@ -395,7 +404,7 @@ public class Agent22374571 implements loveletter.Agent {
         }
         if (number == current.numPlayers() - 1) {
             target = myIndex;
-            while (target == myIndex)
+            while (target == myIndex||current.eliminated(target))
                 target = rand.nextInt(current.numPlayers());
 
         } else {
@@ -427,6 +436,12 @@ public class Agent22374571 implements loveletter.Agent {
         if (deck[cardValue] == 0)
             for (int i = 0; i < current.numPlayers(); i++)
                 hands[i][cardValue] = 0;
+    }
+
+    private boolean vaildPlayer(int i){
+        if (i<0||i>=current.numPlayers()) return false;
+        if (current.eliminated(i)||current.handmaid(i)) return false;
+        return true;
     }
 }
 
