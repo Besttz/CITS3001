@@ -87,7 +87,8 @@ public class Action{
    * **/
   public static Action playGuard(int player, int target, Card guess) throws IllegalActionException{
     if(target==-1) throw new IllegalActionException("Target must be specified");
-    if(player == target) throw new IllegalActionException("Player cannot target themself");
+    if(player == target)
+      throw new IllegalActionException("Player cannot target themself");
     if(guess == null) throw new IllegalActionException("Player cannot guess a null card");
     if(guess == Card.GUARD) throw new IllegalActionException("Player cannot guess a guard");
     return new Action(Card.GUARD, player, target, guess);
