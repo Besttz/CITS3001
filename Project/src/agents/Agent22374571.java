@@ -65,7 +65,7 @@ public class Agent22374571 implements loveletter.Agent {
         //  CLEAR VARIABLE
         Arrays.fill(seen, -1);
         ifSeen = false;
-        seenBaron = 0;
+        seenBaron = -1;
 
     }
 
@@ -277,6 +277,7 @@ public class Agent22374571 implements loveletter.Agent {
                 int[] winPossiblity = new int[current.numPlayers()];
                 for (int j = 0; j < current.numPlayers(); j++) {
                     if (j == myIndex) continue;
+                    if (current.handmaid(j)||current.eliminated(j)) continue;
                     for (int k = 0; k < 9; k++) {
                         if (k > our) break;
                         if (hand_new[j][k] == 1) winPossiblity[j] += cards_new[k];
@@ -295,19 +296,19 @@ public class Agent22374571 implements loveletter.Agent {
                     }
                 }
                 baronTarget = maxPlayer;
-                if (times == current.numPlayers() - 1)
+                if (times == current.numPlayers() - 1||baronTarget==-1)
                     baronTarget = generateTarget();
                 cardPoint[i] = maxWin;
 
             } else if (hand[i] == 5) {
-                if (seenBaron != 1){
+                if (seenBaron != -1){
                     kingPrinceTarget = seenBaron;
                 } else kingPrinceTarget = generateTarget();
 
                 cardPoint[i] = 3;
 
             } else if (hand[i]==6){
-                if (seenBaron != 1){
+                if (seenBaron != -1){
                     kingPrinceTarget = seenBaron;
                 } else kingPrinceTarget = generateTarget();
                 if (hand[1-i]==1) cardPoint[i] = 0;
@@ -316,6 +317,8 @@ public class Agent22374571 implements loveletter.Agent {
 
             } else if (hand[i]==7){
                 if (hand[1-i]==5||hand[1-i]==6) return Action.playCountess(myIndex);
+                else if (round<=2) cardPoint[i] = 6;
+                else cardPoint[i] = 2;
             }
 
         }
