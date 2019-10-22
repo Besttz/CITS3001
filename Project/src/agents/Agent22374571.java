@@ -492,6 +492,8 @@ public class Agent22374571 implements loveletter.Agent {
                     else act = Action.playPriest(myIndex, generateTarget());
                     break;
                 case BARON:
+                    if (baronTarget == 0) baronTarget = generateTarget();
+
                     act = Action.playBaron(myIndex, baronTarget);
                     break;
                 case HANDMAID:
