@@ -317,10 +317,11 @@ public class Agent22374571 implements loveletter.Agent {
 
             //  IF THE USER STILL HOLD THE CARD SEEN BY US
             if (ifSeen && seen[0] != myIndex && !current.eliminated(seen[0]) && !current.handmaid(seen[0])) {
-                if (hand[i] == 1)
+                if (hand[i] == 1) {
                     if (seen[1] > 1)
                         return Action.playGuard(myIndex, seen[0], Card.values()[seen[1] - 1]);
-                if (hand[i] == 3) {
+                }
+                else if (hand[i] == 3) {
                     if (hand[1 - i] > seen[1]) return Action.playBaron(myIndex, seen[0]);
                 } else if (hand[i] == 6) {//  S18 S19 EXCHANGE PRINCESS AND COUNTESS
                     if (seen[1] == 7 && (cards_new[1] / (getSurvive() - 1) < 1))
@@ -469,7 +470,7 @@ public class Agent22374571 implements loveletter.Agent {
             else play = Card.values()[hand[0] - 1];
         }
 
-        try {
+        while (act==null){
             switch (play) {
                 case GUARD:
                     target = guardTarget;
@@ -490,11 +491,14 @@ public class Agent22374571 implements loveletter.Agent {
                         if (cards_new[3] == 1 && handsTMP[target][3] == 1) guessCard = 3;
                         if (cards_new[8] == 1 && handsTMP[target][8] == 1) guessCard = 8;
                     }
-                    while (guessCard == 0) guessCard = rand.nextInt(8);
+                    while (guessCard <= 1) guessCard = rand.nextInt(8);
                     act = Action.playGuard(myIndex, target, Card.values()[guessCard - 1]);
-                    if (act == null)
-                        return null;
-
+                    if (act==null){
+                        if (hand[0]==1&&hand[1]==1)
+                            act= Action.playGuard(myIndex, target, Card.values()[guessCard - 1]);
+                        else if (hand[0]==1) play = Card.values()[hand[1] - 1];
+                        else play = Card.values()[hand[0] - 1];
+                    }
                     break;
                 case PRIEST:
                     if (vaildPlayer(seenBaron)) act = Action.playPriest(myIndex, seenBaron);
@@ -523,9 +527,11 @@ public class Agent22374571 implements loveletter.Agent {
                     act = null;//never play princess
             }
 
-        } catch (IllegalActionException e) {/*do nothing*/}
+        }
 
 
+        if (act == null)
+            return null;
         return act;
     }
 
