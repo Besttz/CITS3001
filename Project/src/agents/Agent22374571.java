@@ -103,9 +103,19 @@ public class Agent22374571 implements loveletter.Agent {
         seeCard(cardValue);
         //  RECORD THE CARD WE SEEN
         if (cardValue == 1) {
+            int guessCardValue = act.guess().value();
+
             // DO THINGS IF WE SEE A GUARD PERFORMING
+            //  CHECK IF HE GUESSED
+            if (current.eliminated(act.target())) {
+                //  REMOVE THIS CARD FROM DECK
+                seeCard(guessCardValue);
+            } else{
+                //  THE TARGET DON'T HAVE THIS ONE
+                handsTMP[act.target()][guessCardValue] = 0;
+            }
+
             if (act.player() != myIndex) {
-                int guessCardValue = act.guess().value();
                 if (deck[guessCardValue] == 1) {
                     handsTMP[act.player()][guessCardValue] = 0;
                 }
@@ -477,7 +487,7 @@ public class Agent22374571 implements loveletter.Agent {
                     if (target == 0) target = generateTarget();
                     //  S6 S7 GUESS FROM THE CARDS WHICH HAS TWO
                     int guessCard = 0;
-                    if (cards_new[4] == 2 && handsTMP[target][4] == 1) guessCard = 4;
+//                    if (cards_new[4] == 2 && handsTMP[target][4] == 1) guessCard = 4;
                     if (cards_new[2] == 2 && handsTMP[target][2] == 1) guessCard = 2;
                     if (cards_new[5] == 2 && handsTMP[target][5] == 1) guessCard = 5;
                     if (cards_new[3] == 2 && handsTMP[target][3] == 1) guessCard = 3;
