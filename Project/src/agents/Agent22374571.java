@@ -178,6 +178,10 @@ public class Agent22374571 implements loveletter.Agent {
             }
 
         } else if (cardValue == 7) {
+            //  HAND LIMITED FOR THE PLAYER
+            for (int i = 0; i <5; i++) {
+                handsTMP[act.player()][i]=0;
+            }
 
         }
 
