@@ -165,6 +165,8 @@ public class State implements Cloneable{
   public String update(Action act, Card card) throws IllegalActionException{
     if(player!= -1)//Actions may only be executed from game states 
       throw new IllegalActionException("Method cannot be called from a player state");
+    if (act == null)
+      allHandmaid(1);
     int a = act.player();//actor
     int t = act.target();//target
     Card c = act.card();
@@ -464,7 +466,7 @@ public class State implements Cloneable{
    * @return the index of the winning player, or -1 if the game is not yet over.
    * **/
   public int gameWinner(){
-    int threshold = num==4?4:num==3?5:num==2?7:0;//sets the required threshhold for different numbers of players.
+    int threshold = num==4?10000:num==3?5:num==2?7:0;//sets the required threshhold for different numbers of players.
     for(int p = 0; p<num; p++)
       if(scores[p]==threshold)return p;
     return -1;
