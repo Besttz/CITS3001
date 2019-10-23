@@ -222,7 +222,6 @@ public class Agent22374571 implements loveletter.Agent {
      */
     public Action playCard(Card c) throws IllegalActionException {
         Action result = playCards(c);
-        //  每次自己出牌后先设置 CardTMP 复原到 100%状态
         handsTMP = hands.clone();
         beSeenBy = -1;
         return result;
@@ -429,8 +428,7 @@ public class Agent22374571 implements loveletter.Agent {
                 if (seenBaron != -1) {
                     kingPrinceTarget = seenBaron;
                 } else kingPrinceTarget = generateTarget();
-                //如果在最后一回合， 小于等于手牌点数的牌（王子和领一张手牌中点数高的）/剩余牌<50%，
-                // 对自己使用王子,否则使用点数较小者，对象为分高者
+                //  LAST ROUND RULES
                 if (lastRound()) {
                     if (hand[1 - i] == 1) continue;
                     if (hand[1 - i] == 2 || hand[1 - i] == 5) {
@@ -543,15 +541,11 @@ public class Agent22374571 implements loveletter.Agent {
 
         }
 
-
-        if (act == null)
-            return null;
         return act;
     }
 
     /**
      * To calculate a target who is not dead or handmaided
-     *
      * @return the target player ID
      */
     private int generateTarget() {
@@ -584,6 +578,10 @@ public class Agent22374571 implements loveletter.Agent {
         return target;
     }
 
+    /**
+     * Check how many players still alive
+     * @return the number of alive player
+     */
     private int getSurvive() {
         int result = current.numPlayers();
         for (int i = 0; i < current.numPlayers(); i++)
@@ -591,6 +589,10 @@ public class Agent22374571 implements loveletter.Agent {
         return result;
     }
 
+    /**
+     * Decrease the number of cards from our estimation
+     * @param cardValue the card value seen
+     */
     private void seeCard(int cardValue) {
         deck[cardValue]--;
         //  REMOVE THIS CARD FROM THE ESTIMATE HANDS IF THERE'S NO MORE
@@ -601,17 +603,32 @@ public class Agent22374571 implements loveletter.Agent {
             }
     }
 
+    /**
+     * To check if a target is a valid target
+     * @param i the player ID
+     * @return true if the target is valid
+     */
     private boolean vaildPlayer(int i) {
         if (i < 0 || i >= current.numPlayers()) return false;
         if (current.eliminated(i) || current.handmaid(i)) return false;
         return true;
     }
 
+    /**
+     * Check if this is the last chance for us to play
+     * @return true if this is the last round
+     */
     private boolean lastRound() {
         if (current.deckSize() / getSurvive() < 1) return true;
         return false;
     }
 
+    /**
+     *  calculate the number of cards left
+     *  which is less or equal than 'card'
+     * @param card The card value to compare
+     * @return how many cards left
+     */
     private int lessEqualThanHand(int card) {
         int result = 0;
         for (int i = 1; i < 9; i++) {
