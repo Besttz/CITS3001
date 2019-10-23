@@ -285,6 +285,7 @@ public class Agent22181467 implements loveletter.Agent {
                             if (cards_new[3] == 1 && hand_new[target][3] == 1) guessCard = 3;
                             if (cards_new[8] == 1 && hand_new[target][8] == 1) guessCard = 8;
                         }
+                        while (guessCard == 0) guessCard = rand.nextInt(9);
                         act = Action.playGuard(myIndex, target, Card.values()[guessCard - 1]);
 
                         break;

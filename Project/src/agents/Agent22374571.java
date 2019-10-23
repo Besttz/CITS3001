@@ -242,6 +242,9 @@ public class Agent22374571 implements loveletter.Agent {
         //  S2 SEEN
         if (beSeenBy != -1) {
             if (hand[0] == 6) {
+                if (hand[1] == 2 || hand[1] == 5 | hand[1] == 7) {
+                    return Action.playKing(myIndex, generateTarget());
+                }
 
             } else if (hand[1] == 2 || hand[1] == 4 || hand[1] == 5 | hand[1] == 7) {
                 play = Card.values()[hand[1] - 1];
@@ -324,7 +327,7 @@ public class Agent22374571 implements loveletter.Agent {
                         return Action.playKing(myIndex, seen[0]);
                     if (seen[1] == 8 && ((cards_new[1] + cards_new[5]) / (getSurvive() - 1) < 1))
                         return Action.playKing(myIndex, seen[0]);
-                } else if (hand[i] == 5&&hand[1-i]!=7) { // S19 PRINCE TO PRINCESS
+                } else if (hand[i] == 5 && hand[1 - i] != 7) { // S19 PRINCE TO PRINCESS
                     if (seen[1] == 8) return Action.playPrince(myIndex, seen[0]);
                 }
                 if (seen[1] == 5 & (hand[0] == 8 || hand[1] == 8)) target = seen[0];
@@ -461,6 +464,10 @@ public class Agent22374571 implements loveletter.Agent {
             if (cardPoint[0] > cardPoint[1]) play = Card.values()[hand[0] - 1];
             else play = Card.values()[hand[1] - 1];
         }
+        if (play.value()==8){
+            if (hand[0]== 8) play = Card.values()[hand[1] - 1];
+            else play = Card.values()[hand[0] - 1];
+        }
 
         try {
             switch (play) {
@@ -483,8 +490,10 @@ public class Agent22374571 implements loveletter.Agent {
                         if (cards_new[3] == 1 && handsTMP[target][3] == 1) guessCard = 3;
                         if (cards_new[8] == 1 && handsTMP[target][8] == 1) guessCard = 8;
                     }
-                    if (guessCard == 0) guessCard = rand.nextInt(8);
+                    while (guessCard == 0) guessCard = rand.nextInt(8);
                     act = Action.playGuard(myIndex, target, Card.values()[guessCard - 1]);
+                    if (act == null)
+                        return null;
 
                     break;
                 case PRIEST:
@@ -536,7 +545,7 @@ public class Agent22374571 implements loveletter.Agent {
         }
         if (number == current.numPlayers() - 1) {
             target = myIndex;
-            while (target == myIndex || current.eliminated(target))
+            while (target == myIndex || current.eliminated(target) || target < 0 || target >= current.numPlayers())
                 target = rand.nextInt(current.numPlayers());
 
         } else {

@@ -32,7 +32,7 @@ public interface Agent{
    * @return the action the agent chooses to perform
    * @throws IllegalActionException when the Action produced is not legal.
    * */
-  public Action playCard(Card c);
+  public Action playCard(Card c) throws IllegalActionException;
 
 }
 
